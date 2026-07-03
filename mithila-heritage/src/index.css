@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors — exact palette from brand guide */
+  --color-gold: #C9A84C;
+  --color-gold-light: #E8C96A;
+  --color-gold-pale: #F5E9C8;
+  --color-maroon: #7B1C2E;
+  --color-maroon-deep: #5A1221;
+  --color-cream: #FAF6EF;
+  --color-cream-dark: #F0E9DC;
+  --color-charcoal: #1C1C1C;
+  --color-muted: #6B6259;
+
+  /* Typography */
+  --font-display: "Playfair Display", ui-serif, Georgia, serif;
+  --font-ui: "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  /* Container */
+  --container-8xl: 90rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-ui);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visibility */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-gold-light);
+  color: var(--color-maroon-deep);
+}
