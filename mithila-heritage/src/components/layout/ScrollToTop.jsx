@@ -1,15 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-// Resets scroll position to the top whenever the route changes —
-// React Router doesn't do this automatically like traditional
-// multi-page sites, so without this, navigating to a new page
-// keeps you at whatever scroll position you were at before.
 export default function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    const scrollToPageTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    scrollToPageTop();
+    const frameId = requestAnimationFrame(scrollToPageTop);
+
+    return () => cancelAnimationFrame(frameId);
   }, [pathname]);
 
   return null;
