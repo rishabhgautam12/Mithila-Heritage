@@ -1,21 +1,77 @@
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import Button from "../ui/Button";
 import heroVideo from "../../assets/video/hero-video.webm";
-import heroImage from "../../assets/images/hero-hotel.jpg";
 
 export default function Hero() {
+  const videoRef = useRef(null);
+  const [videoSrc, setVideoSrc] = useState(heroVideo);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let objectUrl;
+    let cancelled = false;
+
+    const playVideo = () => {
+      video.muted = true;
+      video.playsInline = true;
+
+      if (video.readyState >= 2) {
+        video.play().catch(() => {});
+      }
+    };
+
+    const preloadAndPlay = async () => {
+      try {
+        const response = await fetch(heroVideo, { cache: "force-cache" });
+        const blob = await response.blob();
+
+        if (cancelled) return;
+
+        objectUrl = URL.createObjectURL(blob);
+        setVideoSrc(objectUrl);
+        video.load();
+        playVideo();
+      } catch {
+        playVideo();
+      }
+    };
+
+    preloadAndPlay();
+    video.addEventListener("loadeddata", playVideo);
+    video.addEventListener("canplay", playVideo);
+    document.addEventListener("visibilitychange", playVideo);
+    window.addEventListener("focus", playVideo);
+    window.addEventListener("pointerdown", playVideo, { once: true });
+    window.addEventListener("touchstart", playVideo, { once: true });
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener("loadeddata", playVideo);
+      video.removeEventListener("canplay", playVideo);
+      document.removeEventListener("visibilitychange", playVideo);
+      window.removeEventListener("focus", playVideo);
+      window.removeEventListener("pointerdown", playVideo);
+      window.removeEventListener("touchstart", playVideo);
+
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, []);
+
   return (
     <section className="relative h-screen min-h-[640px] w-full overflow-hidden">
       <video
+        ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        poster={heroImage}
+        preload="auto"
+        src={videoSrc}
         className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src={heroVideo} type="video/webm" />
-      </video>
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/35 to-charcoal/50" />
 
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
