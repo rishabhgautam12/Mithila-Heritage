@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FiWifi, FiTv, FiWind, FiDroplet, FiClock, FiUsers,
@@ -42,6 +42,13 @@ function formatDate(d) {
 export default function RoomDetail() {
   const { roomId } = useParams();
   const room = getRoomBySlug(roomId) || rooms[0];
+  const navigate = useNavigate();
+
+  const toISO = (d) => {
+    if (!d) return "";
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  };
 
   const today = new Date();
   const [viewMonth, setViewMonth] = useState(today.getMonth());
@@ -316,7 +323,21 @@ export default function RoomDetail() {
                 <p className="text-muted text-xs mb-5">Select check-in and check-out dates to see pricing.</p>
               )}
 
-              <Button onClick={() => {}} variant="solid" className="w-full justify-center mb-3" showArrow={false}>
+              <Button
+                onClick={() =>
+                  navigate("/booking", {
+                    state: {
+                      roomSlug: room.slug,
+                      checkIn: toISO(checkIn),
+                      checkOut: toISO(checkOut),
+                      guests: adults + children,
+                    },
+                  })
+                }
+                variant="solid"
+                className="w-full justify-center mb-3"
+                showArrow={false}
+              >
                 Confirm &amp; Book
               </Button>
               <a

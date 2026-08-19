@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiMenu, FiX, FiPhone, FiMail, FiChevronDown } from "react-icons/fi";
+import { FiMenu, FiX, FiPhone, FiMail, FiChevronDown, FiUser } from "react-icons/fi";
 import logo from "../../assets/images/logo.jpeg";
 
 const NAV_LINKS = [
@@ -158,6 +158,13 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-4">
+          <Link
+            to={localStorage.getItem("mh_cust_token") ? "/account" : "/login"}
+            aria-label="My Account"
+            className={`text-xl transition-colors ${solid ? "text-maroon-deep hover:text-gold" : "text-cream hover:text-gold"}`}
+          >
+            <FiUser />
+          </Link>
           <Link
             to="/booking"
             className="hidden md:inline-flex px-6 py-2.5 bg-gold text-charcoal text-xs tracking-[0.15em] uppercase font-medium hover:bg-gold-light transition-colors"

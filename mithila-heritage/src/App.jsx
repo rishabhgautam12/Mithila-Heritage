@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import Layout from "./components/layout/Layout";
 import Home from "./pages/Home";
@@ -16,6 +16,15 @@ import Offers from "./pages/Offers";
 import Careers from "./pages/Careers";
 import Blog from "./pages/Blog";
 import Testimonials from "./pages/Testimonials";
+import CustomerLogin from "./pages/CustomerLogin";
+import CustomerProfile from "./pages/CustomerProfile";
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminBookings from "./pages/admin/AdminBookings";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminCustomers from "./pages/admin/AdminCustomers";
+import AdminSettings from "./pages/admin/AdminSettings";
+import AdminAvailability from "./pages/admin/AdminAvailability";
 
 export default function App() {
   return (
@@ -38,6 +47,21 @@ export default function App() {
           <Route path="/careers" element={<Careers />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/account" element={<CustomerProfile />} />
+        </Route>
+
+        {/* Customer login — standalone page (no navbar/footer) */}
+        <Route path="/login" element={<CustomerLogin />} />
+
+        {/* Admin — no public Layout (no navbar/footer) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="bookings" element={<AdminBookings />} />
+          <Route path="customers" element={<AdminCustomers />} />
+          <Route path="availability" element={<AdminAvailability />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
       </Routes>
     </BrowserRouter>
