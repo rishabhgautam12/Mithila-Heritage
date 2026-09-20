@@ -1,5 +1,16 @@
 # React + Vite
 
+## Backend connection
+
+Copy `.env.example` to `.env` and set `VITE_API_URL` to the backend origin
+(for example, `http://localhost:5000`, without `/api`). All API requests use this
+value through `src/utils/api.js`. Restart the Vite dev server after changing it;
+for production, set it before running `npm run build` and rebuild after changes.
+The backend's `CLIENT_ORIGIN` must allow the frontend origin.
+
+Only public frontend configuration belongs here: Vite exposes `VITE_` variables
+to the browser. Keep database credentials and other secrets in `backend/.env`.
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:

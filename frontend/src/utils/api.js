@@ -1,4 +1,8 @@
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const BASE = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "");
+
+if (!BASE) {
+  throw new Error("Set VITE_API_URL in frontend/.env and restart the frontend server.");
+}
 
 export function getToken() {
   return localStorage.getItem("mh_admin_token");
